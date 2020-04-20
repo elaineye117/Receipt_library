@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import time
 import json
 
-BASE_URL = 'http://www.recipepuppy.com/about/api/'
+BASE_URL = 'http://www.recipepuppy.com/'
 CACHE_FILE_NAME = 'cache.json'
 CACHE_DICT = {}
 
@@ -31,14 +31,14 @@ def save_cache(cache):
     cache_file.write(contents_to_write)
     cache_file.close()
 
-def make_url_request_using_cache(url, cache):
+def make_url_request_using_cache(url, params, cache):
     if (url in cache.keys()): # the url is our unique key
         print("Using cache")
         return cache[url]
     else:
         print("Fetching")
         time.sleep(1)
-        response = requests.get(url)
+        response = requests.get(url,params=params)
         cache[url] = response.text
         save_cache(cache)
         return cache[url]
@@ -47,6 +47,6 @@ def make_url_request_using_cache(url, cache):
 CACHE_DICT = load_cache()
 
 ## Make the soup for the recipe page
-url_text = make_url_request_using_cache(BASE_URL, CACHE_DICT)
+url_text = make_url_request_using_cache(BASE_URL, params, CACHE_DICT)
 soup = BeautifulSoup(url_text, 'html.parser')
 print(soup)
