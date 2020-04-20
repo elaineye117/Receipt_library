@@ -11,7 +11,7 @@ drop_ing = '''
 
 create_ing = '''
     CREATE TABLE "Ingredients" (
-        "Id"  INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+        "Id"  INTEGER PRIMARY KEY AUTOINCREMENT,
         "name"  TEXT NOT NULL
     );
 '''
@@ -32,8 +32,8 @@ drop_rec_ing = '''
 
 create_rec_ing = '''
     CREATE TABLE 'Rec_Ing' (
-    'Rec_Id' INTEGER,
-    'Ing_ID' INTEGER
+    'Rec_Id' INTEGER REFERENCES Recipe(Id) ON UPDATE CASCADE,
+    'Ing_ID' INTEGER REFERENCES Ingredients(Id) ON UPDATE CASCADE
     ); 
 '''
 cur.execute(drop_ing)
@@ -63,5 +63,47 @@ insert_ingredients = '''
 for ingre in ingredients:
     print("inserting", ingre)
     cur.execute(insert_ingredients, ingre)
+
+conn.commit()
+
+##############################
+## INSERT multiple recipes
+##############################
+recipes = [
+    ["Omletes"],
+    ["chiken soup"],
+    ["noodles"],
+    ["pizza"]
+]
+
+insert_recipes = '''
+    INSERT INTO Recipe
+    VALUES (Null, ?)
+'''
+
+for rec in recipes:
+    print("inserting", rec)
+    cur.execute(insert_recipes, rec)
+
+conn.commit()
+
+##############################
+## INSERT multiple connection
+##############################
+connect = [
+    [1,2],
+    [1,3],
+    [1,4],
+    [1,1]
+]
+
+insert_connect = '''
+    INSERT INTO Rec_Ing
+    VALUES (?, ?)
+'''
+
+for c in connect:
+    print("inserting", c)
+    cur.execute(insert_connect, c)
 
 conn.commit()
