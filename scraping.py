@@ -8,34 +8,13 @@ CACHE_FILENAME = "cache.json"
 CACHE_DICT = {}
 
 
-# def load_cache():
-#     try:
-#         cache_file = open(CACHE_FILE_NAME, 'r')
-#         cache_file_contents = cache_file.read()
-#         cache = json.loads(cache_file_contents)
-#         cache_file.close()
-#     except:
-#         cache = {}
-#     return cache
+class Recipe:
 
+    def __init__(self, name, url, website):
+        self.name = name
+        self.url = url
+        self.website = website
 
-# def save_cache(cache):
-#     cache_file = open(CACHE_FILE_NAME, 'w')
-#     contents_to_write = json.dumps(cache)
-#     cache_file.write(contents_to_write)
-#     cache_file.close()
-
-# def make_url_request_using_cache(url, params, cache):
-#     if (url in cache.keys()): # the url is our unique key
-#         print("Using cache")
-#         return cache[url]
-#     else:
-#         print("Fetching")
-#         time.sleep(1)
-#         response = requests.get(url,params=params)
-#         cache[url] = response.text
-#         save_cache(cache)
-#         return cache[url+params.values]
 
 def open_cache():
     ''' Opens the cache file if it exists and loads the JSON into
@@ -113,11 +92,42 @@ def make_url_request_using_cache(baseurl, params, CACHE_DICT):
         save_cache(CACHE_DICT)
         return CACHE_DICT[requests_key]
 
+def get_recipe_instance(url_text):
+    '''Make an instances from the site URL.
+    
+    Parameters
+    ----------
+    site_url: string
+        The URL for a recipe page in recipepuppy.com
+    
+    Returns
+    -------
+    instance
+        a national site instance
+    '''
+    soup = BeautifulSoup(url_text, 'html.parser')
+    div_right = soup.find_all('div', class_='result')
+    recipe_list = []
 
+    for i in div_right:
+        try:
+            name = i.find('h3').text
+        except:
+            name = 'None'
 
-## Make the soup for the recipe page
+        try:
+            url = i.find('div', class_='url').text.split(' ')[0]
+        except:
+            url = 'None'
 
+        try:
+            website = i.find('a')['href']
+        except:
+            website = 'None'
 
+        recipe_list.append(Recipe(name, url, website))
+    # recipe_instance = Recipe(name, url, website)
+    return recipe_list
 
 if __name__ == "__main__":
     ingredient = input('What do you have in your refrigerator(use common between each ingredients e.g. onions,garlic): ')
@@ -127,6 +137,7 @@ if __name__ == "__main__":
     }
 
     CACHE_DICT = open_cache()
-    url_text = make_url_request_using_cache(baseurl, params, CACHE_DICT)
-    soup = BeautifulSoup(url_text, 'html.parser')
-    print(soup)
+
+    test = get_recipe_instance(make_url_request_using_cache(baseurl, params, CACHE_DICT))
+    print(len(test))
+    print(test[0].website)
