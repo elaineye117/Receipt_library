@@ -171,21 +171,19 @@ def handle_the_form():
 @app.route('/favorite', methods=['POST'])
 def get_fav_db():
 
-    index = request.form.getlist("number")
-
-
+    number = request.form.getlist("number")
+    rec_list = []
+    for i in number:
+        i_list = i.split(',')
+        image = i_list[0]
+        name = i_list[1]
+        url = i_list[2]
+        website = i_list[3]
+        rec_list.append(Recipe(None, name,website,url,image))
 
     return render_template('favorite.html', 
-        index = index,
-
+        test = rec_list
         )
-
-
-print(get_fav_db)
-
-
-
-
 
 
 
@@ -194,8 +192,5 @@ print(get_fav_db)
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-
-
 
 
