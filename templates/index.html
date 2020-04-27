@@ -1,0 +1,62 @@
+
+<html>
+    <head>
+        <style>
+            footer{
+                color: black;
+                text-align: center;
+            } 
+            .SearchBar{
+                padding:400px 0px;
+                text-align: center;
+
+            }
+            .logo{
+                background-image: url('https://skidmoresales.com/wp-content/uploads/sites/2/2019/04/ingredientsBG-1.jpg');
+                background-position: center;
+                background-size: auto;
+                background-repeat: no-repeat;
+                text-align:center;
+                padding: 60px 0px;
+                font-family: Impact, Charcoal, sans-serif;
+                font-size: 30px;
+                color:black;
+            }
+            html{
+                scroll-behavior: smooth;
+                background-color:  rgba(102, 205, 171, 0.603);
+            }
+            
+            </style>
+            <link rel="stylesheet" href="css/html5reset.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <meta charset="UTF8"/>
+        <title>Search Recipe</title>
+    </head>
+    <body>
+        
+        <div class='logo'>
+        <h1>
+            Welcome to the Recipe Library</h1>
+        </div>
+
+        <div class="SearchBar"  style="text-align: center; padding-top: 100px; " >
+        <form action='/handle_form' method='POST'>
+            
+            <p><br/>
+                
+            <input type="text" name="ingre" placeholder="Search for Recipes by Ingredients (Use comma to sepreate them)..." style="width: 600px; height: 30px; border: 10px; font-size: medium;"> <br/>  
+            </p>
+
+            <input type="submit" style="width: 100px; height: 25px;" value='Submit Form'><i class="fa fa-search"></i>
+            </form>
+        </div>
+
+
+        <footer>
+            <p>University of Michigan School of Information <br/>
+              &copy; Yiqi Ye - SI507 Intermediate Python 2019-2020</p>
+          </footer>
+
+    </body>
+    </html>

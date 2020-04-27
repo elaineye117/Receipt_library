@@ -1,0 +1,131 @@
+
+<html>
+    <head>
+        <style>
+
+            footer{
+                color: black;
+                text-align: center;
+            } 
+            .SearchBar{
+                padding:0px 0px;
+                text-align: center;
+
+            }
+            .logo{
+                background-image: url('https://skidmoresales.com/wp-content/uploads/sites/2/2019/04/ingredientsBG-1.jpg');
+                background-position: center;
+                background-repeat: no-repeat;
+                text-align:center;
+                padding: 60px 0px;
+                font-family: Impact, Charcoal, sans-serif;
+                font-size: 30px;
+            }
+            html{
+                scroll-behavior: smooth;
+                background-color:  rgba(102, 205, 171, 0.603);
+            }
+            .result_table tbody, th, td{
+                text-align: center;
+                border-top: 2px solid black;
+                padding: 15px;
+                min-width: 150px;
+            }
+
+            .result_table table{
+                border: 2px solid black;
+                border-collapse: separate;
+                border-spacing: 0px;
+                border-radius: 10px;
+                margin: 0 auto;
+                }
+            .result_table th.colhead{
+                background-color: #7e0830;
+                color: white;
+                padding: 10px;
+                text-align: center;
+                text-transform: uppercase;
+                }
+            .result_table table thead th:first-child{
+                border-top-left-radius: 10px;
+                }
+            .result_table table thead th:last-child{
+                border-top-right-radius: 10px;
+                }
+            .result_table table tbody tr:last-child th{
+                border-bottom-left-radius: 10px;
+                }
+            .result_table table tbody tr:last-child td:last-child{
+                border-bottom-right-radius: 10px;
+                }
+            .result input{
+                padding: 100px 0px;
+                width: 100px; 
+                height: 25px;
+                text-align: center;
+            }
+        </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="css/html5reset.css">
+        <meta charset="UTF8"/>
+        <title>Recipes</title>
+    </head>
+    <body>
+        <div class='logo'>
+        <h1>
+            Recipes with {{ingre}} </h1></div>
+
+        <div class="SearchBar"  style="text-align: center; padding-top:0px; " >
+        <form action='/handle_form' method='POST'>
+            
+        <p><br/>
+            
+        <input type="text" name="ingre" placeholder="Search for Recipes Again by Other or More Ingredients..." style="width: 600px; height: 30px; border: 10px; font-size: medium;"> <br/>  
+        </p>
+
+        <input type="submit" style="width: 100px; height: 25px;" value='Submit Form'><i class="fa fa-search"></i>
+        </form>
+        </div>
+
+
+
+        
+        <div class='result_table'>
+            <form action="/favorite" method="POST">
+        <table>
+            <thead>
+                <tr>
+                <th>Add to Favorite</th>
+                <th>Image</th>
+                <th>Recipe Name</th>
+                <th>Click to get Instruction</th>
+                <th>Source Website</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for i in test %} 
+                <tr>
+                <td><input type='checkbox' name='number' value=i.index>{{i.index}}</td>
+                <td><img src='{{i.image}}' alt='Oops No Image'></td>
+                <td>{{i.name}}</td>
+                <td><a href='{{i.website}}'> Get Instruction </a></td>
+                <td>{{i.url}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <input type="submit" value='Add to Favorite'><i class="fa fa-search"></i>
+</form>  
+    </div>
+
+    <footer>
+        <p>University of Michigan School of Information <br/>
+          &copy; Yiqi Ye - SI507 Intermediate Python 2019-2020</p>
+      </footer>
+
+    </body>
+
+
+    </html>

@@ -2,18 +2,24 @@ import requests
 from bs4 import BeautifulSoup
 import time
 import json
+from flask import Flask, render_template, request
 
 baseurl = 'http://www.recipepuppy.com/'
 CACHE_FILENAME = "cache.json"
 CACHE_DICT = {}
 
+##################
+##  Scrapping   ##
+##################
 
 class Recipe:
 
-    def __init__(self, name, url, website):
+    def __init__(self, index, name, url, website, image):
         self.name = name
         self.url = url
         self.website = website
+        self.image = image
+        self.index = index
 
 
 def open_cache():
@@ -109,7 +115,7 @@ def get_recipe_instance(url_text):
     div_right = soup.find_all('div', class_='result')
     recipe_list = []
 
-    for i in div_right:
+    for index, i in enumerate(div_right, 1):
         try:
             name = i.find('h3').text
         except:
@@ -124,20 +130,66 @@ def get_recipe_instance(url_text):
             website = i.find('a')['href']
         except:
             website = 'None'
+        try:
+            image = i.find('img', class_='thumb')['src']
+        except:
+            image = 'None'
 
-        recipe_list.append(Recipe(name, url, website))
+        recipe_list.append(Recipe(index, name, url, website, image))
     # recipe_instance = Recipe(name, url, website)
     return recipe_list
 
-if __name__ == "__main__":
-    ingredient = input('What do you have in your refrigerator(use common between each ingredients e.g. onions,garlic): ')
+
+##################
+##     HTML     ##
+##################
+
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return render_template('index.html') # just the static HTML
+
+@app.route('/handle_form', methods=['POST'])
+def handle_the_form():
+
+    ingre = request.form["ingre"]
 
     params = {
-        'i': ingredient
+        'i': ingre
     }
 
     CACHE_DICT = open_cache()
-
     test = get_recipe_instance(make_url_request_using_cache(baseurl, params, CACHE_DICT))
-    print(len(test))
-    print(test[0].website)
+    
+    # print(len(test))
+    # print(test[0].website)
+
+    return render_template('results.html', 
+        ingre = ingre,
+        test = test
+        )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
+
+
+
+
