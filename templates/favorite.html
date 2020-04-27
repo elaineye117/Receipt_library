@@ -7,7 +7,7 @@
                 color: black;
                 text-align: center;
             } 
-            .SearchBar{
+            .back{
                 padding:0px 0px;
                 text-align: center;
 
@@ -59,45 +59,28 @@
                 border-bottom-right-radius: 10px;
                 }
             .result input{
-                padding: 10px 0px;
+                padding: 100px 0px;
                 width: 100px; 
                 height: 25px;
-            }
-            .add_fav{
-                margin: auto;
+                text-align: center;
             }
         </style>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="css/html5reset.css">
         <meta charset="UTF8"/>
-        <title>Recipes</title>
+        <title>Favorite</title>
     </head>
     <body>
         <div class='logo'>
         <h1>
-            Recipes with {{ingre}} </h1></div>
-
-        <div class="SearchBar"  style="text-align: center; padding-top:0px; " >
-        <form action='/handle_form' method='POST'>
-            
-        <p><br/>
-            
-        <input type="text" name="ingre" placeholder="Search for Recipes Again by Other or More Ingredients..." style="width: 600px; height: 30px; border: 10px; font-size: medium;"> <br/>  
-        </p>
-
-        <input type="submit" style="width: 100px; height: 25px;" value='Search'><i class="fa fa-search"></i>
-        </form>
-        </div>
-
-
+            My Favorite Recipes </h1></div>
 
         
         <div class='result_table'>
-            <form action="/favorite" method="POST">
         <table>
             <thead>
                 <tr>
-                <th>Add to Favorite</th>
+                <th>Number</th>
                 <th>Image</th>
                 <th>Recipe Name</th>
                 <th>Click to get Instruction</th>
@@ -106,22 +89,30 @@
             </thead>
 
             <tbody>
-                {% for i in test %} 
+                {% for g in index %}
                 <tr>
-                <td><input type='checkbox' name='number' value={{i.index}}>{{i.index}}</td>
+                    <td>{{g}}</td>
+                </tr>
+                {% endfor %}
+                <!-- {% for i in test %} 
+                <tr>
+                <td>{{i.index}}</td>
                 <td><img src='{{i.image}}' alt='Oops No Image'></td>
                 <td>{{i.name}}</td>
                 <td><a href='{{i.website}}'> Get Instruction </a></td>
                 <td>{{i.url}}</td>
                 </tr>
-                {% endfor %}
+                {% endfor %} -->
             </tbody>
         </table>
     </div>
-    <div class='add_fav'>
-        <input type="submit" value='Add to Favorite'><i class="fa fa-search"></i> 
+
+    <div class="back"  style="text-align: center; padding-top:0px; " >
+    <form action='/' method='POST'>
+    <input type="submit" style="width: 150px; height: 30px;" value='Go Back to Search Page'>
+    </form>
     </div>
-    </form> 
+
 
     <footer>
         <p>University of Michigan School of Information <br/>

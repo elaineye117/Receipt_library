@@ -161,9 +161,6 @@ def handle_the_form():
 
     CACHE_DICT = open_cache()
     test = get_recipe_instance(make_url_request_using_cache(baseurl, params, CACHE_DICT))
-    
-    # print(len(test))
-    # print(test[0].website)
 
     return render_template('results.html', 
         ingre = ingre,
@@ -171,11 +168,20 @@ def handle_the_form():
         )
 
 
+@app.route('/favorite', methods=['POST'])
+def get_fav_db():
+
+    index = request.form.getlist("number")
 
 
 
+    return render_template('favorite.html', 
+        index = index,
+
+        )
 
 
+print(get_fav_db)
 
 
 
