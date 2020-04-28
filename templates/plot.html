@@ -48,6 +48,45 @@
             box-shadow: 0 5px #666;
             transform: translateY(4px);
             }
+            .result_table tbody, th, td{
+                text-align: center;
+                border-top: 2px solid black;
+                padding: 15px;
+                min-width: 150px;
+            }
+
+            .result_table table{
+                border: 2px solid black;
+                border-collapse: separate;
+                border-spacing: 0px;
+                border-radius: 10px;
+                margin: 0 auto;
+                }
+            .result_table th.colhead{
+                background-color: #7e0830;
+                color: white;
+                padding: 10px;
+                text-align: center;
+                text-transform: uppercase;
+                }
+            .result_table table thead th:first-child{
+                border-top-left-radius: 10px;
+                }
+            .result_table table thead th:last-child{
+                border-top-right-radius: 10px;
+                }
+            .result_table table tbody tr:last-child th{
+                border-bottom-left-radius: 10px;
+                }
+            .result_table table tbody tr:last-child td:last-child{
+                border-bottom-right-radius: 10px;
+                }
+            .result input{
+                padding: 100px 0px;
+                width: 100px; 
+                height: 25px;
+                text-align: center;
+            }
             </style>
             <link rel="stylesheet" href="css/html5reset.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -63,6 +102,28 @@
 
         {{plot_div | safe}}
 
+
+        <div class='result_table'>
+            <table>
+                <thead>
+                    <tr>
+                    <th>Website</th>
+                    <th>Count</th>
+
+                    </tr>
+                </thead>
+    
+                <tbody>
+                    {% for row in result %} 
+                    <tr>
+                    <td>{{row[0]}}</td>
+                    <td>{{row[1]}}</td>
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
 
         <div class="back"  style="text-align: center; padding-top:0px; " >

@@ -127,21 +127,10 @@
                 </tr>
             </thead>
 
-            <!-- <tbody>
-                {% for i in test %} 
-                <tr>
-                <td><input type='checkbox' name='number' value={{i.index}}>{{i.index}}</td>
-                <td><img src='{{i.image}}' alt='Oops No Image'></td>
-                <td>{{i.name}}</td>
-                <td><a href='{{i.website}}'> Get Instruction </a></td>
-                <td>{{i.url}}</td>
-                </tr>
-                {% endfor %}
-            </tbody> -->
             <tbody>
                 {% for i in test %} 
                 <tr>
-                <td><input type='checkbox' name='number' value='{{i.image}},{{i.name}},{{i.website}},{{i.url}}'>{{i.index}}</td>
+                <td><input type='checkbox' name='number' value='{{i.image}},{{i.name}},{{i.website}},{{i.url}},{{ingre}}'>{{i.index}}</td>
                 <td><img src='{{i.image}}' alt='Oops No Image'></td>
                 <td>{{i.name}}</td>
                 <td><a href='{{i.website}}'> Get Instruction </a></td>

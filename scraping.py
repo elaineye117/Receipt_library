@@ -165,16 +165,28 @@ def get_website():
     conn = sqlite3.connect("recipe.sqlite")
     cur = conn.cursor()
     q = '''
-        select website, count(website)
+        select website, count(website) as count
         from Recipe
         group by website
+        order by count desc
+        limit 5
     '''
     results = cur.execute(q).fetchall()
     conn.close()
     return results
 
-
-
+def get_ingredient():
+    conn = sqlite3.connect("recipe.sqlite")
+    cur = conn.cursor()
+    q = '''
+        select ingredients, count(ingredients) as count
+        from Recipe
+        group by ingredients
+        order by count desc
+    '''
+    results = cur.execute(q).fetchall()
+    conn.close()
+    return results
 
 
 
@@ -191,31 +203,12 @@ def index():
 @app.route('/handle_form', methods=['POST'])
 def handle_the_form():
 
-    # conn = sqlite3.connect("recipe.sqlite")
-    # cur = conn.cursor()
-
     ingre = request.form["ingre"]
 
     params = {
         'i': ingre
     }
     
-    # insert_ingredients = '''
-    # INSERT INTO Ingredients
-    # VALUES (Null, ?)
-    # '''
-
-    # if ',' in ingre:
-    #     ingredient = ingre.split(',')
-    # else:
-    #     ingredient = "".join(ingre)
-    #     # ingredient=[ingre]
-    
-    # for item in ingredient:
-    #     cur.execute(insert_ingredients, item)
-
-    # conn.commit()
-
     CACHE_DICT = open_cache()
     test = get_recipe_instance(make_url_request_using_cache(baseurl, params, CACHE_DICT))
 
@@ -241,11 +234,11 @@ def get_fav_db():
         url = i_list[2]
         website = i_list[3]
         rec_list.append(Recipe(None, name,website,url,image))
-        db_recipe.append(i_list[:4])
+        db_recipe.append(i_list[:5])
     
     insert_recipes = '''
     INSERT INTO Recipe
-    VALUES (Null, ?, ?, ?, ?)
+    VALUES (Null, ?, ?, ?, ?, ?)
     '''
     for rec in db_recipe:
         print("inserting", rec)
@@ -254,7 +247,8 @@ def get_fav_db():
     conn.commit()
 
     return render_template('favorite.html', 
-        test = rec_list
+        test = rec_list,
+        number=number
         )
 
 @app.route('/my_favorite', methods=['POST'])
@@ -272,43 +266,48 @@ def my_fav_db():
 def plot():
 
     results = get_website()
-    x_vals = results[0]
-    y_vals = results[1]
+
+    x_vals = []
+    y_vals = []
+
+    for row in results:
+        x_vals.append(row[0])
+        y_vals.append(row[1])
+
     bars_data = go.Bar(
         x=x_vals,
         y=y_vals
     )
     fig = go.Figure(data=bars_data)
     div = fig.to_html(full_html=False)
-    return render_template("plot.html", plot_div=div)
+    return render_template("plot.html", 
+    plot_div=div,
+    result = results)
 
 
-@app.route('/word_cloud', methods=['POST', 'GET'])
+@app.route('/ingredients', methods=['POST', 'GET'])
 def cloud():
-    x_vals = ['lions', 'tigers', 'bears']
-    y_vals = [6, 11, 3]
+    results = get_ingredient()
+
+    x_vals = []
+    y_vals = []
+
+    for row in results:
+        x_vals.append(row[0])
+        y_vals.append(row[1])
+
     bars_data = go.Bar(
         x=x_vals,
         y=y_vals
     )
     fig = go.Figure(data=bars_data)
     div = fig.to_html(full_html=False)
-    return render_template("word_cloud.html", plot_div=div)
+    return render_template("ingredients.html", plot_div=div, result = results)
 
 if __name__ == "__main__":
     # conn = sqlite3.connect("recipe.sqlite")
     # cur = conn.cursor()
 
-    # drop_ing = '''
-    #     DROP TABLE IF EXISTS "Ingredients";
-    # '''
-
-    # create_ing = '''
-    #     CREATE TABLE "Ingredients" (
-    #         "Id"  INTEGER PRIMARY KEY AUTOINCREMENT,
-    #         "name"  TEXT NOT NULL
-    #     );
-    # '''
     # drop_recipe = '''
     #     DROP TABLE IF EXISTS 'Recipe';
     # '''
@@ -322,22 +321,9 @@ if __name__ == "__main__":
     #     "website" TEXT
     #     ); 
     # '''
-    # drop_rec_ing = '''
-    #     DROP TABLE IF EXISTS 'Rec_Ing';
-    # '''
 
-    # create_rec_ing = '''
-    #     CREATE TABLE 'Rec_Ing' (
-    #     'Rec_Id' INTEGER REFERENCES Recipe(Id) ON UPDATE CASCADE,
-    #     'Ing_ID' INTEGER REFERENCES Ingredients(Id) ON UPDATE CASCADE
-    #     ); 
-    # '''
-    # cur.execute(drop_ing)
-    # cur.execute(create_ing) 
     # cur.execute(drop_recipe)
     # cur.execute(create_recipe)
-    # # cur.execute(drop_rec_ing)
-    # # cur.execute(create_rec_ing)
 
     # conn.commit()
 
