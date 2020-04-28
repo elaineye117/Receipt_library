@@ -4,7 +4,7 @@ During this unprecedented time, everyone in the state is asked for staying at ho
 The project I want to work on is about creating an interactive product that you could type in one or multiple ingredients that you have, and the software will be able to return to you with a list of receipts, and then you could look into different receipts for cooking instruction.
 Moreover, user could add their favorite recipe into their recipe database and havve access to the dababases as well as some interesting graphs to with infomation of their taste.  
 
-This project involves working with web scripting, database and HTML design.
+This project involves working with web scripting, caching, database and HTML design.
 
 Data Source:
 http://www.recipepuppy.com/ & User Input
