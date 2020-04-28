@@ -66,6 +66,28 @@
             .add_fav{
                 margin: auto;
             }
+            .button {
+            display: inline-block;
+            padding: 15px 25px;
+            font-size: 20px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            outline: none;
+            color: #fff;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 9px #999;
+            }
+
+            .button:hover {background-color: #3e8e41}
+
+            .button:active {
+            background-color: #3e8e41;
+            box-shadow: 0 5px #666;
+            transform: translateY(4px);
+            }
         </style>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="css/html5reset.css">
@@ -77,7 +99,7 @@
         <h1>
             Recipes with {{ingre}} </h1></div>
 
-        <div class="SearchBar"  style="text-align: center; padding-top:0px; " >
+        <div class="SearchBar">
         <form action='/handle_form' method='POST'>
             
         <p><br/>
@@ -85,7 +107,7 @@
         <input type="text" name="ingre" placeholder="Search for Recipes Again by Other or More Ingredients..." style="width: 600px; height: 30px; border: 10px; font-size: medium;"> <br/>  
         </p>
 
-        <input type="submit" style="width: 100px; height: 25px;" value='Search'><i class="fa fa-search"></i>
+        <input type="submit" class="button" value='Search'><i class="fa fa-search"></i>
         </form>
         </div>
 
@@ -134,13 +156,13 @@
         </table>
     </div>
     <div class='add_fav'>
-        <input type="submit" value='Add to Favorite'><i class="fa fa-search"></i> 
+        <input type="submit" class="button" value='Add to Favorite'><i class="fa fa-search"></i> 
     </div>
     </form> 
 
     <footer>
         <p>University of Michigan School of Information <br/>
-          &copy; Yiqi Ye - SI507 Intermediate Python 2019-2020</p>
+          &copy; Yiqi Ye - SI507 Python 2020</p>
       </footer>
 
     </body>

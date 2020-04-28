@@ -95,13 +95,25 @@
     <body>
         <div class='logo'>
         <h1>
-            Added the following Recipes to My Favorite Recipe Library!!</h1></div>
+            My Favorite Recipes Library!</h1></div>
 
-        
+            <div class="back" >
+                <form action='/word_cloud' method='POST'>
+                <input type="submit" class="button" value='My Favorite Ingredients'>
+                </form>
+                </div>
+
+            <div class="back">
+                <form action='/plot' method='POST'>
+                <input type="submit" class="button" value='Most Common Source Website'>
+                </form>
+                </div>
+                
         <div class='result_table'>
         <table>
             <thead>
                 <tr>
+                <th>Number</th>
                 <th>Image</th>
                 <th>Recipe Name</th>
                 <th>Click to get Instruction</th>
@@ -110,12 +122,13 @@
             </thead>
 
             <tbody>
-                {% for i in test %} 
+                {% for row in result %} 
                 <tr>
-                <td><img src='{{i.image}}' alt='Oops No Image'></td>
-                <td>{{i.name}}</td>
-                <td><a href='{{i.website}}'> Get Instruction </a></td>
-                <td>{{i.url}}</td>
+                <td>{{row[0]}}</td>
+                <td><img src='{{row[1]}}' alt='Oops No Image'></td>
+                <td>{{row[2]}}</td>
+                <td><a href='{{row[3]}}'> Get Instruction </a></td>
+                <td>{{row[4]}}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -123,10 +136,11 @@
     </div>
 
     <div class="back"  style="text-align: center; padding-top:0px; " >
-    <form action='/my_favorite' method='POST'>
-    <input type="submit" class="button" value='Go to My Recipe Library'>
-    </form>
-    </div>
+        <form action='/' method='POST'>
+        <input type="submit" class="button" value='Go Back to Search Page'>
+        </form>
+        </div>
+
 
 
     <footer>

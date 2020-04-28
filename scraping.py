@@ -3,6 +3,8 @@ from bs4 import BeautifulSoup
 import time
 import json
 from flask import Flask, render_template, request
+import sqlite3
+import plotly.graph_objects as go
 
 baseurl = 'http://www.recipepuppy.com/'
 CACHE_FILENAME = "cache.json"
@@ -139,6 +141,42 @@ def get_recipe_instance(url_text):
     # recipe_instance = Recipe(name, url, website)
     return recipe_list
 
+##################
+##   Database   ##
+##################
+
+
+
+def get_fav():
+    conn = sqlite3.connect("recipe.sqlite")
+    cur = conn.cursor()
+    q = '''
+        SELECT *
+        FROM Recipe
+        ORDER BY ID
+    '''
+    results = cur.execute(q).fetchall()
+    conn.close()
+    return results
+
+
+
+def get_website():
+    conn = sqlite3.connect("recipe.sqlite")
+    cur = conn.cursor()
+    q = '''
+        select website, count(website)
+        from Recipe
+        group by website
+    '''
+    results = cur.execute(q).fetchall()
+    conn.close()
+    return results
+
+
+
+
+
 
 ##################
 ##     HTML     ##
@@ -146,18 +184,37 @@ def get_recipe_instance(url_text):
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/', methods=['POST', 'GET'])
 def index():
     return render_template('index.html') # just the static HTML
 
 @app.route('/handle_form', methods=['POST'])
 def handle_the_form():
 
+    # conn = sqlite3.connect("recipe.sqlite")
+    # cur = conn.cursor()
+
     ingre = request.form["ingre"]
 
     params = {
         'i': ingre
     }
+    
+    # insert_ingredients = '''
+    # INSERT INTO Ingredients
+    # VALUES (Null, ?)
+    # '''
+
+    # if ',' in ingre:
+    #     ingredient = ingre.split(',')
+    # else:
+    #     ingredient = "".join(ingre)
+    #     # ingredient=[ingre]
+    
+    # for item in ingredient:
+    #     cur.execute(insert_ingredients, item)
+
+    # conn.commit()
 
     CACHE_DICT = open_cache()
     test = get_recipe_instance(make_url_request_using_cache(baseurl, params, CACHE_DICT))
@@ -170,9 +227,13 @@ def handle_the_form():
 
 @app.route('/favorite', methods=['POST'])
 def get_fav_db():
+    
+    conn = sqlite3.connect("recipe.sqlite")
+    cur = conn.cursor()
 
     number = request.form.getlist("number")
     rec_list = []
+    db_recipe = []
     for i in number:
         i_list = i.split(',')
         image = i_list[0]
@@ -180,17 +241,104 @@ def get_fav_db():
         url = i_list[2]
         website = i_list[3]
         rec_list.append(Recipe(None, name,website,url,image))
+        db_recipe.append(i_list[:4])
+    
+    insert_recipes = '''
+    INSERT INTO Recipe
+    VALUES (Null, ?, ?, ?, ?)
+    '''
+    for rec in db_recipe:
+        print("inserting", rec)
+        cur.execute(insert_recipes, rec)
+
+    conn.commit()
 
     return render_template('favorite.html', 
         test = rec_list
         )
 
+@app.route('/my_favorite', methods=['POST'])
+def my_fav_db():
 
 
+    results = get_fav()
+
+    return render_template('my_favorite.html', 
+        result = results
+        )
 
 
+@app.route('/plot', methods=['POST', 'GET'])
+def plot():
+
+    results = get_website()
+    x_vals = results[0]
+    y_vals = results[1]
+    bars_data = go.Bar(
+        x=x_vals,
+        y=y_vals
+    )
+    fig = go.Figure(data=bars_data)
+    div = fig.to_html(full_html=False)
+    return render_template("plot.html", plot_div=div)
+
+
+@app.route('/word_cloud', methods=['POST', 'GET'])
+def cloud():
+    x_vals = ['lions', 'tigers', 'bears']
+    y_vals = [6, 11, 3]
+    bars_data = go.Bar(
+        x=x_vals,
+        y=y_vals
+    )
+    fig = go.Figure(data=bars_data)
+    div = fig.to_html(full_html=False)
+    return render_template("word_cloud.html", plot_div=div)
 
 if __name__ == "__main__":
+    # conn = sqlite3.connect("recipe.sqlite")
+    # cur = conn.cursor()
+
+    # drop_ing = '''
+    #     DROP TABLE IF EXISTS "Ingredients";
+    # '''
+
+    # create_ing = '''
+    #     CREATE TABLE "Ingredients" (
+    #         "Id"  INTEGER PRIMARY KEY AUTOINCREMENT,
+    #         "name"  TEXT NOT NULL
+    #     );
+    # '''
+    # drop_recipe = '''
+    #     DROP TABLE IF EXISTS 'Recipe';
+    # '''
+
+    # create_recipe = '''
+    #     CREATE TABLE 'Recipe' (
+    #     'Id' INTEGER PRIMARY KEY AUTOINCREMENT,
+    #     "image" TEXT,
+    #     'Recipe_Name' TEXT NOT NULL,
+    #     "url" TEXT,
+    #     "website" TEXT
+    #     ); 
+    # '''
+    # drop_rec_ing = '''
+    #     DROP TABLE IF EXISTS 'Rec_Ing';
+    # '''
+
+    # create_rec_ing = '''
+    #     CREATE TABLE 'Rec_Ing' (
+    #     'Rec_Id' INTEGER REFERENCES Recipe(Id) ON UPDATE CASCADE,
+    #     'Ing_ID' INTEGER REFERENCES Ingredients(Id) ON UPDATE CASCADE
+    #     ); 
+    # '''
+    # cur.execute(drop_ing)
+    # cur.execute(create_ing) 
+    # cur.execute(drop_recipe)
+    # cur.execute(create_recipe)
+    # # cur.execute(drop_rec_ing)
+    # # cur.execute(create_rec_ing)
+
+    # conn.commit()
+
     app.run(debug=True)
-
-

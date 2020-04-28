@@ -1,9 +1,8 @@
 # The precipepuppy api does not request key, so there is no need to create secrets.py file.
 
-import sqlite3
 
-conn = sqlite3.connect("foodreceipt.sqlite")
-cur = conn.cursor()
+
+
 
 drop_ing = '''
     DROP TABLE IF EXISTS "Ingredients";
@@ -13,6 +12,7 @@ create_ing = '''
     CREATE TABLE "Ingredients" (
         "Id"  INTEGER PRIMARY KEY AUTOINCREMENT,
         "name"  TEXT NOT NULL
+
     );
 '''
 
@@ -23,12 +23,13 @@ drop_recipe = '''
 create_recipe = '''
     CREATE TABLE 'Recipe' (
     'Id' INTEGER PRIMARY KEY AUTOINCREMENT,
-    'Recipe_Name' TEXT NOT NULL
+    'Recipe_Name' TEXT NOT NULL,
+    "image" TEXT,
+    "url" TEXT,
+    "website" TEXT,
     ); 
 '''
-drop_rec_ing = '''
-    DROP TABLE IF EXISTS 'Rec_Ing'
-'''
+
 
 create_rec_ing = '''
     CREATE TABLE 'Rec_Ing' (

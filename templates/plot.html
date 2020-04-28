@@ -58,19 +58,17 @@
         
         <div class='logo'>
         <h1>
-            Welcome to the Recipe Library</h1>
+            Here is your favorite Ingredients</h1>
         </div>
 
-        <div class="SearchBar"  style="text-align: center; padding-top: 100px; " >
-        <form action='/handle_form' method='POST'>
-            
-            <p><br/>
-                
-            <input type="text" name="ingre" placeholder="Search for Recipes by Ingredients (Use comma to sepreate them)..." style="width: 600px; height: 30px; border: 10px; font-size: medium;"> <br/>  
-            </p>
+        {{plot_div | safe}}
 
-            <input type="submit" class="button" value='Search'><i class="fa fa-search"></i>
-            </form>
+
+
+        <div class="back"  style="text-align: center; padding-top:0px; " >
+        <form action='/' method='POST'>
+        <input type="submit" class="button" value='Go Back to Search Page'>
+        </form>
         </div>
 
 
